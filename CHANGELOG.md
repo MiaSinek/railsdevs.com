@@ -1,6 +1,24 @@
 # Changelog
 
+# 2024
+
+* April 12 - Progressively enhanced combobox for developer specialties #820 @MiaSinek
+* January 19 - Add GitLab profile to Dev Profile, under Online Presence section
+
 # 2023
+
+### June
+
+* June 21 - Sort developers by recently updated, by default #871
+* June 21 - Notify admins of recent LinkedIn profile changes #839 @sarvaiyanidhi
+* June 7 - Render signed hiring agreement PDFs via Prawn #870
+
+### April
+
+* April 8 - Send subscription renewal email #860 @jkostolansky
+* April 7 - Launch recommended sorting option #859
+* April 5 - Distinguish between new profiles and recently updated ones #856
+* April 4 - Remove `developers.available_on` #854
 
 ### March
 

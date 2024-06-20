@@ -24,23 +24,24 @@ class DevelopersTest < ActionDispatch::IntegrationTest
     assert_description_contains "looking for their"
   end
 
-  test "developers are sorted newest first" do
-    create_developer(hero: "Oldest")
-    create_developer(hero: "Newest")
+  test "developers are sorted by when they updated their profile" do
+    create_developer(hero: "Recent Update").update!(updated_at: Date.today)
+    create_developer(hero: "Older Update").update!(updated_at: Date.yesterday)
 
     get developers_path
 
-    assert_select "button.font-medium[value=newest]"
-    assert response.body.index("Newest") < response.body.index("Oldest")
+    assert_select "button.font-medium[value=freshest]"
+    assert response.body.index("Recent Update") < response.body.index("Older Update")
   end
 
-  test "developers can be sorted by availability" do
-    create_developer(hero: "Available", available_on: Date.yesterday)
+  test "developers can be sorted by newest first" do
+    create_developer(hero: "Oldest")
+    create_developer(hero: "Newest")
 
-    get developers_path(sort: :availability)
+    get developers_path(sort: :newest)
 
-    assert_select "button.font-medium[value=availability]"
-    assert_select "h2", "Available"
+    assert_select "button.font-medium[value=newest]"
+    assert response.body.index("Newest") < response.body.index("Oldest")
   end
 
   test "subscribers can filter developers by time zone" do
@@ -98,6 +99,16 @@ class DevelopersTest < ActionDispatch::IntegrationTest
     assert_select "h2", "OSS lover"
   end
 
+  test "developers can be filtered by specialty" do
+    user = users(:subscribed_business)
+    sign_in(user)
+
+    specialty = specialties(:ai)
+    get developers_path(specialty_ids: [specialty.id])
+
+    assert_select %(input[checked][type=checkbox][value="#{specialty.id}"][name="specialty_ids[]"])
+  end
+
   test "developers not interested in work can be shown" do
     create_developer(hero: "Not interested", search_status: :not_interested)
 
@@ -125,13 +136,13 @@ class DevelopersTest < ActionDispatch::IntegrationTest
 
   test "paginating filtered developers respects the filters" do
     sign_in users(:subscribed_business)
-    developers(:prospect).update!(available_on: Date.yesterday, search_status: :open)
+    developers(:prospect).update!(search_status: :open)
 
     with_pagy_default_items(1) do
-      get developers_path(sort: :availability)
+      get developers_path(sort: :newest)
       assert_select "#developers h2", count: 1
       assert_select "#mobile-filters h2", count: 1
-      assert_select "a[href=?]", "/developers?sort=availability&page=2"
+      assert_select "a[href=?]", "/developers?sort=newest&page=2"
     end
   end
 
@@ -417,7 +428,6 @@ class DevelopersTest < ActionDispatch::IntegrationTest
     {
       developer: {
         name: "Developer",
-        available_on: Date.yesterday,
         hero: "A developer",
         bio: "I develop.",
         avatar: fixture_file_upload("lovelace.jpg", "image/jpeg"),

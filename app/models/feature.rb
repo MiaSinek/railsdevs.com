@@ -10,7 +10,9 @@ class Feature
     when :business_welcome_email
       true
     when :developer_specialties
-      !Rails.env.production?
+      true
+    when :developer_specialty_querying
+      true
     else
       raise "Unknown feature name: #{feature_name}"
     end

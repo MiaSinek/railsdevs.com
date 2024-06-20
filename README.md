@@ -24,7 +24,7 @@ brew bundle install --no-upgrade
 
 ...or manually:
 
-* Ruby 3.1.2
+* Ruby 3.2.3
 * [libpq](https://www.postgresql.org/docs/9.5/libpq.html) - `brew install libpq`
     * `libpg` is needed to use the native `pg` gem without Rosetta on M1 macs
 * [postgresql](https://www.postgresql.org) - `brew install postgresql`
@@ -41,19 +41,19 @@ brew bundle install --no-upgrade
 
 ### Initial setup
 
-Start PostgreSQL server.
+Start the PostgreSQL server.
 
 ```bash
 brew services start postgresql
 ```
 
-Start Redis server.
+Start the Redis server.
 
 ```bash
 brew services start redis
 ```
 
-An installation script is included with the repository that will automatically get the application setup.
+An installation script is included with the repository that will automatically get the application set up.
 
 ```bash
 bin/setup
@@ -87,7 +87,7 @@ You will need to configure Stripe or do a mock configuration (ie set dummy value
     1. [Create a Stripe secret key for test mode](https://dashboard.stripe.com/test/apikeys)
     1. Run `stripe listen --forward-to localhost:3000/pay/webhooks/stripe` in order to generate your webhook signing secret.
     1. [Create a product](https://dashboard.stripe.com/test/products/create) with a recurring, monthly price
-    1. Generate your editable development credentials file via `EDITOR="mate --wait" bin/rails credentials:edit --environment development`. You may need to install and provide terminal access to the editor first (mate, subl, and atom should all work). If you run the code above and receive the message "New credentials encrypted and saved", without having had the opportunity to edit the file first, things have gone astray. You will need to troubleshoot this step based on your OS and desired editor, to ensure you are able to edit the development.yml file before it is encoded and saved. [See here for more details.](https://stackoverflow.com/questions/52370065/issue-to-open-credentials-file)
+    1. Generate your editable development credentials file via `EDITOR="mate --wait" bin/rails credentials:edit --environment development`. You may need to install and provide terminal access to the editor first (mate, subl, and atom should all work). If you run the code above and receive the message "New credentials encrypted and saved", without having had the opportunity to edit the file first, things have gone astray. You will need to troubleshoot this step based on your OS and desired editor, to ensure you can edit the development.yml file before it is encoded and saved. [See here for more details.](https://stackoverflow.com/questions/52370065/issue-to-open-credentials-file)
     1. Add the secret key, the price, and your webhook signing secret to your development credentials in the following format, and save/close the file:
 
 ```
@@ -108,6 +108,7 @@ Application monitoring is powered by [Scout APM](https://scoutapm.com). This hel
 * Run `rails test` to run unit/integration tests.
 * Run `rails test:system` to run system tests, using `headless_chrome`.
 * Run `HEADFUL=1 rails test:system` to run system tests, using `headful_chrome`.
+* Run `bin/rails verify_mailer_previews` to verify mailer previews.
 
 ## Changelog
 
@@ -115,15 +116,15 @@ Significant changes and product updates are documented in the [changelog](CHANGE
 
 ## License
 
-All code and documentation is copyright 2022 Joe Masilotti [under the MIT license](LICENSE).
+All code and documentation are copyright 2023 Joe Masilotti [under the MIT license](LICENSE).
 
-All other resources including, but not limited to, images, copy, and branding, are copyright 2022 Joe Masilotti and used by permission for this project only.
+All other resources including, but not limited to, images, copy, and branding, are copyright 2023 Joe Masilotti and used by permission for this project only.
 
 ## Open source support
 
-RailsDevs uses a free or discounted open source plan from the following companies. Thank you for the support!
+RailsDevs uses a free or discounted open-source plan from the following companies. Thank you for the support!
 
-### Scout APM – application monitoring
+### Scout APM – application monitoring
 
 <a href="https://tracking.scoutapm.com/t/102858/c/24eac3db-39dd-4863-b972-a35a3e35b72b/NB2HI4DTHIXS65DFOIXGY2JPNA4GWMRZOI======/ter-li-h8k29r">
   <img src="https://user-images.githubusercontent.com/2092156/169346365-12f3806f-5a04-494a-a2d6-45611666c57c.png" width="250" alt="Scout APM logo">
